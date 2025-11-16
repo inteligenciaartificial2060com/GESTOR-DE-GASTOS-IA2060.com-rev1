@@ -3,103 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor de Movimientos Financieros IA2060</title>
-    <link rel="stylesheet" href="styles.css"> </head>
+    <title>IA2060 - Gestión Financiera Inteligente</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
 <body>
 
     <header>
         <div id="logo-container">
-            <img src="https://i.ibb.co/cXhr44XB/LOGO-IA2060-IMG.jpg" alt="Logo de IA2060">
-            <div class="link-container">
-                <a href="https://www.ia2060.com">ia2060.com</a>
-            </div>
+            <img src="https://i.ibb.co/60V0n48/logo-ia.png" alt="Logo IA2060">
+            <h1>IA2060 - Finanzas Proyectadas</h1>
         </div>
-        <h1>Gestor de Movimientos Financieros IA2060</h1>
+        <div class="link-container">
+            <a href="https://www.ia2060.com" target="_blank">Visita www.ia2060.com</a>
+        </div>
     </header>
 
     <main>
+        
         <div class="controls-container">
             <div class="view-controls">
-                <button id="listViewBtn" class="active">Vista Listado</button>
-                <button id="calendarViewBtn">Vista Calendario</button>
+                <button id="listViewBtn" class="view-btn active">📅 Listado</button>
+                <button id="calendarViewBtn" class="view-btn">🗓️ Calendario</button>
             </div>
             <div class="currency-controls">
                 <label for="currencySelect">Moneda:</label>
                 <select id="currencySelect">
-                    <option value="EUR">€ EUR (Default)</option>
-                    <option value="USD">$ USD</option>
+                    <option value="€">Euro (€)</option>
+                    <option value="$">Dólar ($)</option>
                 </select>
             </div>
         </div>
 
         <section id="form-section">
             <div class="form-container">
-                <h2>Registro de Movimiento</h2>
-                
-                <div class="current-month-display">
-                    Mes de Ingreso: <span id="displayMonth"></span>
-                    <button id="prevMonthBtn" type="button">◀️</button>
-                    <button id="nextMonthBtn" type="button">▶️</button>
-                </div>
+                <h2>Registrar Nuevo Movimiento</h2>
 
+                <div class="centered-month-display">
+                    <button id="prevMonthBtn">◀</button>
+                    <span id="displayMonth"></span>
+                    <button id="nextMonthBtn">▶</button>
+                </div>
+                
                 <form id="registroForm">
-                    <label for="tipo">Tipo:</label>
-                    <select id="tipo" name="tipo" required>
+                    
+                    <label for="tipoSelect">Tipo de Movimiento</label>
+                    <select id="tipoSelect" required>
+                        <option value="">-- Selecciona el tipo --</option>
                         <option value="ingreso">Ingreso</option>
                         <option value="gasto">Gasto</option>
                     </select>
 
-                    <label for="categoria">Categoría:</label>
-                    <select id="categoria" name="categoria" required>
-                        </select>
+                    <label for="montoInput">Monto (€ / $)</label>
+                    <input type="number" id="montoInput" step="0.01" placeholder="Ej: 1250.00" required>
                     
-                    <label for="descripcion">Descripción:</label>
-                    <input type="text" id="descripcion" name="descripcion" required maxlength="20">
+                    <label for="categoriaSelect">Categoría</label>
+                    <select id="categoriaSelect" required disabled>
+                        <option value="">-- Selecciona el tipo primero --</option>
+                    </select>
                     
-                    <label for="monto">Monto:</label>
-                    <input type="number" id="monto" name="monto" min="0" step="0.01" required>
-                    
-                    <label for="fecha">Fecha (D/M/A):</label>
-                    <input type="date" id="fecha" name="fecha" required>
-                    
+                    <label for="descripcionInput">Descripción</label>
+                    <input type="text" id="descripcionInput" placeholder="Ej: Sueldo de Noviembre / Alquiler" required>
+
+                    <label for="fechaInput">Fecha</label>
+                    <input type="date" id="fechaInput" required>
+
                     <div class="form-buttons">
-                        <button type="submit">Agregar Movimiento</button>
-                        <button id="vozBtn" type="button">🎙️ Voz</button>
+                        <button type="submit" id="addMovimientoBtn">Agregar Movimiento</button>
+                        <button type="button" id="vozBtn">🎙️ Voz</button>
                     </div>
                 </form>
             </div>
         </section>
 
         <section id="data-section">
-            <div class="data-header">
-                <h2 id="saldoTotal">Saldo Total: 0.00 €</h2>
-                <div class="utility-buttons">
-                    <button id="clearAllBtn" class="delete-btn">💣 Borrar Todo</button>
-                    <button id="resetBalanceBtn" type="button">Saldo Inicial</button>
-                </div>
-            </div>
-            
-            <div id="calendar-view" class="view-container hidden">
-                <div id="calendar-header">
-                    <h3 id="calendarMonthTitle"></h3>
-                </div>
-                <div id="calendar-grid">
+            <div class="centered-data-header">
+                <h2>Resumen Financiero</h2>
+                <span id="saldoTotal">Cargando...</span>
+
+                <div class="financial-summary">
+                    <div class="summary-item">
+                        <p>Saldo Proyectado</p>
+                        <span id="saldoProyectado" class="saldo-value">0.00</span>
                     </div>
-                <p class="legend-text">
-                    **Leyenda:** <span class="ingreso-bg">Ingreso</span> | <span class="gasto-bg">Gasto</span> | <span class="red-balance">Saldo Rojo</span>
-                </p>
+                    <div class="summary-item">
+                        <p>Saldo Actual (Realizado)</p>
+                        <span id="saldoActual" class="saldo-value">0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <p>Pendiente a Cobrar</p>
+                        <span id="pendienteCobrar" class="saldo-value pending-cobrar">0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <p>Pendiente a Pagar</p>
+                        <span id="pendientePagar" class="saldo-value pending-pagar">0.00</span>
+                    </div>
+                </div>
+
+                <div class="final-messages">
+                    <p id="felicitacionesMsg" class="success-message hidden"></p>
+                    <p id="invitacionMsg" class="invitation-message hidden">
+                        Ayúdanos a crecer, visita: 
+                        <a href="https://www.ia2060.com" target="_blank">www.ia2060.com</a>
+                    </p>
+                </div>
             </div>
 
-            <div id="list-view" class="view-container">
+            <div class="centered-utility-buttons">
+                <button id="clearAllBtn">Eliminar Todos los Movimientos</button>
+                <button id="resetBalanceBtn">Reiniciar Saldo Inicial</button>
+            </div>
+        </section>
+
+
+        <section id="list-view" class="data-view">
+            <h3>Detalle de Movimientos</h3>
+            <div id="movimientos-container">
                 <table id="movimientosTable">
                     <thead>
                         <tr>
-                            <th>Realizado</th>
+                            <th>Fecha</th>
                             <th>Tipo</th>
                             <th>Categoría</th>
                             <th>Descripción</th>
                             <th>Monto</th>
-                            <th>Fecha</th>
+                            <th>Saldo Proyectado</th>
+                            <th class="realizado-checkbox">Realizado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -108,24 +136,41 @@
                 </table>
             </div>
         </section>
+
+        <section id="calendar-view" class="data-view hidden">
+            <div id="calendar-header">
+                <h3 id="calendarMonthTitle"></h3>
+            </div>
+            <div id="calendar-grid">
+                <div class="calendar-day-header">Lun</div>
+                <div class="calendar-day-header">Mar</div>
+                <div class="calendar-day-header">Mié</div>
+                <div class="calendar-day-header">Jue</div>
+                <div class="calendar-day-header">Vie</div>
+                <div class="calendar-day-header">Sáb</div>
+                <div class="calendar-day-header">Dom</div>
+                </div>
+        </section>
+
     </main>
     
-    <div id="red-balance-modal" class="modal hidden">
+    <div id="alertModal" class="modal hidden">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
-            <h3 id="modal-title">🚨 ¡ALERTA DE SALDO EN ROJO! 🚨</h3>
+            <h3 id="modal-title">🔴 ¡ATENCIÓN! ALERTA DE SALDO EN ROJO</h3>
             <p id="modal-message"></p>
+
             <div class="action-links">
-                <a href="https://www.inteligenciaartificial2060.com/formulario-pagina-web-ia-100-gratuita-sin-tarjeta-de-credito" target="_blank" class="modal-link">
-                    <img src="logo_web.png" alt="Logo Web"> ¡Genera Ingreso con Nosotros!
+                <a href="https://www.ia2060.com" target="_blank" class="modal-link">
+                    <img src="https://i.ibb.co/L5w2R0K/ia2060-icon.png" alt="Icono IA2060">
+                    Visita www.ia2060.com para soluciones
                 </a>
-                <a href="https://www.inteligenciaartificial2060.com/moneytiza-ia2060" target="_blank" class="modal-link">
-                    <img src="logo_money.png" alt="Logo Money"> Moneytiza IA2060
-                </a>
+                <a href="#" id="modalCloseLink" class="modal-link">Entendido, cerrar alerta</a>
             </div>
         </div>
     </div>
-    
+
+
     <script src="app.js"></script>
 </body>
 </html>
