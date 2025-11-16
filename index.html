@@ -1,384 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Registro de Movimientos Financieros</title>
     <meta charset="UTF-8">
-    <style>
-        /* Estilos CSS */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f8f8f8;
-        }
-        h1 {
-            color: #333;
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 10px;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="number"], input[type="date"], select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box; /* Incluye padding en el ancho */
-        }
-        button {
-            background-color: #007bff; /* Azul primario */
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-right: 10px;
-        }
-        button#vozBtn {
-            background-color: #28a745; /* Verde para voz */
-        }
-        button#seleccionarLogoBtn {
-            background-color: #6c757d; /* Gris para logo */
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            border: 1px solid #eee;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .ingreso {
-            color: green;
-            font-weight: bold;
-        }
-        .gasto {
-            color: red;
-            font-weight: bold;
-        }
-        #logo-container {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-        #logo-container img {
-            width: 80px; 
-            height: auto;
-            border-radius: 50%;
-        }
-    </style>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Movimientos Financieros IA2060</title>
+    <link rel="stylesheet" href="styles.css"> </head>
 <body>
-    <div id="logo-container">
+
+    <header>
+        <div id="logo-container">
+            <img src="https://i.ibb.co/cXhr44XB/LOGO-IA2060-IMG.jpg" alt="Logo de IA2060">
+            <div class="link-container">
+                <a href="https://www.ia2060.com">ia2060.com</a>
+            </div>
         </div>
-    
-    <h1>Registro de Movimientos Financieros</h1>
-    
-    <form id="registroForm">
-        <label for="tipo">Tipo de Movimiento:</label>
-        <select id="tipo" name="tipo">
-            <option value="ingreso">Ingreso</option>
-            <option value="gasto">Gasto</option>
-        </select>
-        
-        <label for="descripcion">Descripción:</label>
-        <input type="text" id="descripcion" name="descripcion" required>
-        
-        <label for="monto">Monto (€):</label>
-        <input type="number" id="monto" name="monto" min="0" step="0.01" required>
-        
-        <label for="fecha">Fecha:</label>
-        <input type="date" id="fecha" name="fecha" required>
-        
-        <button type="submit">Agregar Movimiento</button>
-    </form>
-    
-    <button id="vozBtn">🎙️ Ingresar por Voz</button>
-    
-    <hr>
+        <h1>Gestor de Movimientos Financieros IA2060</h1>
+    </header>
 
-    <h2>Listado de Movimientos</h2>
-    <table id="movimientosTable">
-        <thead>
-            <tr>
-                <th>Tipo</th>
-                <th>Descripción</th>
-                <th>Monto</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            </tbody>
-    </table>
+    <main>
+        <div class="controls-container">
+            <div class="view-controls">
+                <button id="listViewBtn" class="active">Vista Listado</button>
+                <button id="calendarViewBtn">Vista Calendario</button>
+            </div>
+            <div class="currency-controls">
+                <label for="currencySelect">Moneda:</label>
+                <select id="currencySelect">
+                    <option value="EUR">€ EUR (Default)</option>
+                    <option value="USD">$ USD</option>
+                </select>
+            </div>
+        </div>
 
-    <hr>
-    
-    <h3 id="saldoTotal">Saldo Total: 0.00 €</h3>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const registroForm = document.getElementById('registroForm');
-            const movimientosTableBody = document.getElementById('movimientosTable').getElementsByTagName('tbody')[0];
-            const vozBtn = document.getElementById('vozBtn');
-            const logoContainer = document.getElementById('logo-container');
-            const saldoTotalElement = document.getElementById('saldoTotal');
+        <section id="form-section">
+            <div class="form-container">
+                <h2>Registro de Movimiento</h2>
+                
+                <div class="current-month-display">
+                    Mes de Ingreso: <span id="displayMonth"></span>
+                    <button id="prevMonthBtn" type="button">◀️</button>
+                    <button id="nextMonthBtn" type="button">▶️</button>
+                </div>
 
-            // --- Funciones de Persistencia (LocalStorage) ---
+                <form id="registroForm">
+                    <label for="tipo">Tipo:</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="ingreso">Ingreso</option>
+                        <option value="gasto">Gasto</option>
+                    </select>
 
-            /**
-             * Carga los movimientos desde localStorage.
-             * @returns {Array} Lista de movimientos.
-             */
-            function cargarMovimientos() {
-                try {
-                    const movimientosJSON = localStorage.getItem('movimientos');
-                    return movimientosJSON ? JSON.parse(movimientosJSON) : [];
-                } catch (e) {
-                    console.error('Error al cargar movimientos de localStorage:', e);
-                    return [];
-                }
-            }
+                    <label for="categoria">Categoría:</label>
+                    <select id="categoria" name="categoria" required>
+                        </select>
+                    
+                    <label for="descripcion">Descripción:</label>
+                    <input type="text" id="descripcion" name="descripcion" required maxlength="20">
+                    
+                    <label for="monto">Monto:</label>
+                    <input type="number" id="monto" name="monto" min="0" step="0.01" required>
+                    
+                    <label for="fecha">Fecha (D/M/A):</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                    
+                    <div class="form-buttons">
+                        <button type="submit">Agregar Movimiento</button>
+                        <button id="vozBtn" type="button">🎙️ Voz</button>
+                    </div>
+                </form>
+            </div>
+        </section>
 
-            /**
-             * Guarda la lista actual de movimientos en localStorage.
-             * @param {Array} movimientos Lista de movimientos a guardar.
-             */
-            function guardarMovimientos(movimientos) {
-                try {
-                    localStorage.setItem('movimientos', JSON.stringify(movimientos));
-                    actualizarSaldoTotal();
-                } catch (e) {
-                    console.error('Error al guardar movimientos en localStorage:', e);
-                    alert('Error: No se pudieron guardar los datos. Asegúrate de estar ejecutando la página desde un servidor o GitHub Pages (HTTPS).');
-                }
-            }
+        <section id="data-section">
+            <div class="data-header">
+                <h2 id="saldoTotal">Saldo Total: 0.00 €</h2>
+                <div class="utility-buttons">
+                    <button id="clearAllBtn" class="delete-btn">💣 Borrar Todo</button>
+                    <button id="resetBalanceBtn" type="button">Saldo Inicial</button>
+                </div>
+            </div>
             
-            // --- Funciones de Saldo y Tabla ---
+            <div id="calendar-view" class="view-container hidden">
+                <div id="calendar-header">
+                    <h3 id="calendarMonthTitle"></h3>
+                </div>
+                <div id="calendar-grid">
+                    </div>
+                <p class="legend-text">
+                    **Leyenda:** <span class="ingreso-bg">Ingreso</span> | <span class="gasto-bg">Gasto</span> | <span class="red-balance">Saldo Rojo</span>
+                </p>
+            </div>
 
-            /**
-             * Calcula y actualiza el saldo total.
-             */
-            function actualizarSaldoTotal() {
-                const movimientos = cargarMovimientos();
-                const saldo = movimientos.reduce((total, mov) => {
-                    return mov.tipo === 'ingreso' ? total + mov.monto : total - mov.monto;
-                }, 0);
-                saldoTotalElement.textContent = `Saldo Total: ${saldo.toFixed(2)} €`;
-                saldoTotalElement.style.color = saldo >= 0 ? 'green' : 'red';
-            }
-
-            /**
-             * Agrega una fila a la tabla y actualiza el almacenamiento.
-             * @param {Object} movimiento El objeto de movimiento.
-             */
-            function agregarFilaTabla(movimiento) {
-                const newRow = movimientosTableBody.insertRow();
-                newRow.className = movimiento.tipo; // Asigna clase CSS para color
-                
-                newRow.innerHTML = `
-                    <td>${movimiento.tipo.charAt(0).toUpperCase() + movimiento.tipo.slice(1)}</td>
-                    <td>${movimiento.descripcion}</td>
-                    <td>${movimiento.monto.toFixed(2)} €</td>
-                    <td>${movimiento.fecha}</td>
-                    <td>
-                        <button type="button" onclick="editarMovimiento(this)">Editar</button>
-                        <button type="button" onclick="eliminarMovimiento(this)">Eliminar</button>
-                    </td>
-                `;
-            }
-
-            /**
-             * Renderiza la tabla completa con los datos actuales.
-             */
-            function renderizarTabla() {
-                // Limpiar la tabla
-                movimientosTableBody.innerHTML = ''; 
-                const movimientos = cargarMovimientos();
-                movimientos.forEach(movimiento => agregarFilaTabla(movimiento));
-                actualizarSaldoTotal();
-            }
-
-            // --- Lógica de CRUD (Editar/Eliminar) ---
-
-            /**
-             * Expone la función global para editar un movimiento.
-             * @param {HTMLButtonElement} button El botón que fue presionado.
-             */
-            window.editarMovimiento = function(button) {
-                const row = button.parentNode.parentNode;
-                const tipo = row.cells[0].textContent.toLowerCase();
-                const descripcion = row.cells[1].textContent;
-                // Limpiamos el símbolo de moneda para parsear el número
-                const monto = parseFloat(row.cells[2].textContent.replace(' €', '')); 
-                const fecha = row.cells[3].textContent;
-
-                // 1. Precargar el formulario para editar
-                document.getElementById('tipo').value = tipo;
-                document.getElementById('descripcion').value = descripcion;
-                document.getElementById('monto').value = monto;
-                document.getElementById('fecha').value = fecha;
-
-                // 2. Eliminar la fila de la tabla y del almacenamiento local 
-                //    (Se re-agregará con la nueva versión al hacer submit)
-                eliminarMovimiento(button);
-                alert('Datos cargados para edición. Modifica y haz clic en "Agregar Movimiento" para guardar los cambios.');
-            };
-
-            /**
-             * Expone la función global para eliminar un movimiento.
-             * @param {HTMLButtonElement} button El botón que fue presionado.
-             */
-            window.eliminarMovimiento = function(button) {
-                const row = button.parentNode.parentNode;
-                const descripcion = row.cells[1].textContent;
-                const monto = parseFloat(row.cells[2].textContent.replace(' €', ''));
-                const fecha = row.cells[3].textContent;
-                
-                let movimientos = cargarMovimientos();
-                
-                // Filtra el movimiento basado en su contenido (asume que la combinación es única para simplicidad)
-                movimientos = movimientos.filter(m => 
-                    !(m.descripcion === descripcion && 
-                      m.monto.toFixed(2) === monto.toFixed(2) && 
-                      m.fecha === fecha)
-                );
-                
-                guardarMovimientos(movimientos);
-                // Eliminar la fila del DOM
-                row.parentNode.removeChild(row);
-                actualizarSaldoTotal();
-            };
-
-            // --- Lógica de Formulario ---
-
-            registroForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const tipo = document.getElementById('tipo').value;
-                const descripcion = document.getElementById('descripcion').value;
-                const monto = parseFloat(document.getElementById('monto').value);
-                const fecha = document.getElementById('fecha').value;
-
-                const nuevoMovimiento = { tipo, descripcion, monto, fecha };
-
-                let movimientos = cargarMovimientos();
-                movimientos.push(nuevoMovimiento);
-                
-                guardarMovimientos(movimientos); // Guarda la lista actualizada
-                renderizarTabla(); // Vuelve a renderizar para mostrar el nuevo dato
-
-                registroForm.reset();
-            });
-
-            // --- Lógica de Reconocimiento de Voz ---
-
-            vozBtn.addEventListener('click', function() {
-                // Comprobación de compatibilidad (Solo Chrome/Edge basado en Chromium)
-                if (!('webkitSpeechRecognition' in window)) {
-                    alert("Tu navegador no soporta el reconocimiento de voz. Usa Chrome o Edge sobre HTTPS.");
-                    return;
-                }
-
-                const recognition = new webkitSpeechRecognition();
-                recognition.lang = 'es-ES'; // Configura el idioma a español
-                recognition.continuous = false; // Solo una frase
-                recognition.interimResults = false;
-
-                recognition.onstart = function() {
-                    console.log('Escuchando...');
-                    vozBtn.textContent = '🗣️ Hablando... Di "Ingreso [monto] de [descripción]"';
-                };
-                
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript;
-                    console.log('Transcripción: ', transcript);
-                    procesarComandoVoz(transcript);
-                };
-
-                recognition.onerror = function(event) {
-                    console.error('Error de reconocimiento de voz', event.error);
-                    alert(`Error de voz: ${event.error === 'no-speech' ? 'No se detectó voz.' : 'Ocurrió un error.'}`);
-                    vozBtn.textContent = '🎙️ Ingresar por Voz';
-                };
-
-                recognition.onend = function() {
-                    vozBtn.textContent = '🎙️ Ingresar por Voz';
-                };
-
-                recognition.start();
-            });
-
-            function procesarComandoVoz(comando) {
-                // Mejora en la extracción de datos
-                const comandoLower = comando.toLowerCase();
-
-                // 1. Tipo (Ingreso o Gasto)
-                let tipo = comandoLower.includes('ingreso') ? 'ingreso' : (comandoLower.includes('gasto') ? 'gasto' : '');
-
-                // 2. Monto (busca cualquier número)
-                const montoMatch = comandoLower.match(/(\d+[\.,]?\d*)/);
-                let monto = montoMatch ? parseFloat(montoMatch[1].replace(',', '.')) : NaN;
-
-                // 3. Fecha (simplificado: usa la fecha actual si no se especifica)
-                // Implementación compleja de fecha por voz es mejor dejarla manual, por ahora usamos hoy
-                let fecha = new Date().toISOString().split('T')[0]; 
-                
-                // 4. Descripción (el resto del texto)
-                let descripcion = comando;
-                // Limpiar la descripción de palabras clave de tipo y monto
-                descripcion = descripcion.replace(/ingreso|gasto|(\d+[\.,]?\d*)/gi, '').trim(); 
-                
-                // Limpiar preposiciones comunes
-                descripcion = descripcion.replace(/de|por|el|la|para/gi, '').trim();
-
-                if (tipo && !isNaN(monto) && monto > 0) {
-                    document.getElementById('tipo').value = tipo;
-                    document.getElementById('descripcion').value = descripcion || (tipo === 'ingreso' ? 'Ingreso por Voz' : 'Gasto por Voz');
-                    document.getElementById('monto').value = monto;
-                    document.getElementById('fecha').value = fecha;
-
-                    alert('✅ Datos precargados por voz. Revisa y haz clic en "Agregar Movimiento" para guardar.');
-                } else {
-                    alert('❌ No se pudo extraer el tipo o el monto. Intenta decir: "Ingreso 1500 de Sueldo" o "Gasto 50 de Comida"');
-                }
-            }
-            
-            // --- Lógica del Logo (Modificada para solo cargar) ---
-            
-            // El código para seleccionar el logo se ha simplificado y eliminado el input type="file" 
-            // para no complicar la configuración inicial. Puedes agregar tu logo editando el HTML.
-
-            // --- Inicialización ---
-
-            renderizarTabla(); // Carga la tabla al iniciar
-        });
-    </script>
+            <div id="list-view" class="view-container">
+                <table id="movimientosTable">
+                    <thead>
+                        <tr>
+                            <th>Realizado</th>
+                            <th>Tipo</th>
+                            <th>Categoría</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    
+    <div id="red-balance-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 id="modal-title">🚨 ¡ALERTA DE SALDO EN ROJO! 🚨</h3>
+            <p id="modal-message"></p>
+            <div class="action-links">
+                <a href="https://www.inteligenciaartificial2060.com/formulario-pagina-web-ia-100-gratuita-sin-tarjeta-de-credito" target="_blank" class="modal-link">
+                    <img src="logo_web.png" alt="Logo Web"> ¡Genera Ingreso con Nosotros!
+                </a>
+                <a href="https://www.inteligenciaartificial2060.com/moneytiza-ia2060" target="_blank" class="modal-link">
+                    <img src="logo_money.png" alt="Logo Money"> Moneytiza IA2060
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
 </body>
 </html>
