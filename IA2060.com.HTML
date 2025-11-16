@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botones y Logo al Final</title>
+
+    <style>
+        /* Elimina los márgenes predeterminados del body para que '100vh' funcione correctamente. */
+        body {
+            margin: 0; 
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; 
+        }
+        
+        /* === ESTILOS PARA LA POSICIÓN (CLAVE) === */
+        .container-buttons {
+            height: 100vh; /* Ocupa el 100% de la altura de la ventana visible. */
+            display: flex;
+            flex-direction: column; /* Apila los elementos verticalmente. */
+            justify-content: flex-end; /* Mueve todo el contenido (Logo + Botones) al fondo. */
+            align-items: center; /* Centra los elementos horizontalmente. */
+            padding-bottom: 30px; /* Espacio para que no toque el borde inferior. */
+        }
+        
+        /* === ESTILOS DEL LOGOTIPO === */
+        .logo {
+            width: 180px; 
+            height: auto;
+            margin-bottom: 25px; /* Espacio entre el logo y el primer botón */
+        }
+
+        /* === ESTILOS GENERALES DEL BOTÓN === */
+        .button {
+            width: 90%; 
+            max-width: 450px; 
+            margin: 10px 0;
+            padding: 15px 30px;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: block; 
+        }
+        
+        /* === ESTILOS DE COLORACIÓN === */
+        .button-green {
+            background-color: #4CAF50; 
+            color: white;
+            border: 2px solid #4CAF50;
+        }
+
+        .button-green:hover {
+            background-color: #45a049;
+        }
+        
+        .button-yellow {
+            background-color: #FFC107; 
+            color: #333; 
+            border: 2px solid #FFC107;
+        }
+
+        .button-yellow:hover {
+            background-color: #e0ae00;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container-buttons">
+        <img src="ruta/a/tu/logotipo.png" alt="Logotipo IA2060" class="logo">
+        
+        <a href="https://www.ia2060.com" target="_blank" class="button-green button">
+            <strong>Conectarse con IA2060.com</strong>
+        </a>
+        <a href="https://www.inteligenciaartificial2060.com/transformacion-digital/pagina-web-ia/web-ia-100-gratuita-sin-tarjeta-de-credito-en-minutos" target="_blank" class="button-yellow button">
+            <strong>Crear web con IA 100 % GRATUITA EN MINUTOS SIN TARJETA DE CRÉDITO</strong>
+        </a>
+    </div>
+
+</body>
+</html>
